@@ -20,6 +20,28 @@ export function createApp(db: Database.Database, uploadsDir?: string): express.E
   app.use(cors());
   app.use(express.json());
 
+  // Basic auth protection (set SITE_USER and SITE_PASSWORD env vars to enable)
+  const siteUser = process.env.SITE_USER;
+  const sitePassword = process.env.SITE_PASSWORD;
+  if (siteUser && sitePassword) {
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      const auth = req.headers.authorization;
+      if (auth) {
+        const [scheme, encoded] = auth.split(' ');
+        if (scheme === 'Basic' && encoded) {
+          const decoded = Buffer.from(encoded, 'base64').toString('utf-8');
+          const [user, pass] = decoded.split(':');
+          if (user === siteUser && pass === sitePassword) {
+            next();
+            return;
+          }
+        }
+      }
+      res.set('WWW-Authenticate', 'Basic realm="Client Intelligence Tree"');
+      res.status(401).send('Authentication required');
+    });
+  }
+
   // Mount API routes
   app.use('/api/trees', createTreeRoutes(db));
   app.use('/api/trees/:treeId/documents', createDocumentRoutes(db, uploadsDir));
