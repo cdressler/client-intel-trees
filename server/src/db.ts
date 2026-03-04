@@ -107,7 +107,10 @@ export interface DatabaseOptions {
 }
 
 export function createDatabase(options: DatabaseOptions = {}): Database.Database {
-  const dbPath = options.inMemory ? ':memory:' : (options.filePath ?? 'data/client-intelligence.db');
+  const defaultPath = process.env.DATA_DIR
+    ? `${process.env.DATA_DIR}/client-intelligence.db`
+    : 'data/client-intelligence.db';
+  const dbPath = options.inMemory ? ':memory:' : (options.filePath ?? defaultPath);
 
   const db = new Database(dbPath);
 

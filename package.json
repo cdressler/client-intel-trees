@@ -4,5 +4,9 @@
   "workspaces": [
     "server",
     "client"
-  ]
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=client && npm run build --workspace=server",
+    "start": "npm run start --workspace=server"
+  }
 }

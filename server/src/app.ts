@@ -1,3 +1,5 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import type Database from 'better-sqlite3';
@@ -9,19 +11,31 @@ import { createDecisionTreeRoutes } from './routes/decisionTree.js';
 import { createBriefRoutes } from './routes/briefs.js';
 import { createSettingsRoutes } from './routes/settings.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export function createApp(db: Database.Database, uploadsDir?: string): express.Express {
   const app = express();
 
   app.use(cors());
   app.use(express.json());
 
-  // Mount routes
+  // Mount API routes
   app.use('/api/trees', createTreeRoutes(db));
   app.use('/api/trees/:treeId/documents', createDocumentRoutes(db, uploadsDir));
   app.use('/api/trees/:treeId/research', createResearchRoutes(db));
   app.use('/api/trees/:treeId/decision-tree', createDecisionTreeRoutes(db));
   app.use('/api/briefs', createBriefRoutes(db));
   app.use('/api/settings', createSettingsRoutes(db));
+
+  // Serve static frontend in production
+  if (process.env.NODE_ENV === 'production') {
+    const clientDist = path.resolve(__dirname, '../../client/dist');
+    app.use(express.static(clientDist));
+    app.get('*', (_req, res) => {
+      res.sendFile(path.join(clientDist, 'index.html'));
+    });
+  }
 
   // Global error handler
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
