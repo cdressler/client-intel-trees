@@ -127,7 +127,7 @@ export default function Dashboard() {
     <div className="dashboard-container">
         <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
           <h1 className="text-2xl font-bold text-base-content">Client Trees</h1>
-          {!showForm && (
+          {!showForm && trees.length > 0 && (
             <button
               className="btn btn-primary btn-sm"
               onClick={() => setShowForm(true)}
