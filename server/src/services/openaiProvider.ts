@@ -33,7 +33,7 @@ async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
       if (attempt === MAX_RETRIES - 1) break;
 
       if (error instanceof OpenAI.RateLimitError) {
-        const retryAfter = error.headers?.get?.('retry-after') ?? error.headers?.['retry-after'];
+        const retryAfter = error.headers?.get?.('retry-after') ?? (error.headers as Record<string, string> | undefined)?.['retry-after'];
         const delayMs = retryAfter
           ? parseInt(String(retryAfter), 10) * 1000
           : BASE_DELAY_MS * Math.pow(2, attempt);
