@@ -1,0 +1,8 @@
+{
+  "name": "client-intelligence-tree",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ]
+}
