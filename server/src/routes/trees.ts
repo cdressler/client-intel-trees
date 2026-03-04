@@ -37,7 +37,7 @@ export function createTreeRoutes(db: Database.Database): Router {
 
   router.get('/:treeId', (req: Request, res: Response, next: NextFunction) => {
     try {
-      const tree = service.getTree(req.params.treeId);
+      const tree = service.getTree(req.params.treeId as string);
       res.json(tree);
     } catch (err) {
       next(err);

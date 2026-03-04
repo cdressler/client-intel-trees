@@ -43,7 +43,7 @@ export function createBriefRoutes(db: Database.Database): Router {
   // GET /:id — Get brief detail
   router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
     try {
-      const brief = briefService.getBrief(req.params.id);
+      const brief = briefService.getBrief(req.params.id as string);
       res.json(brief);
     } catch (err) {
       next(err);
@@ -102,7 +102,7 @@ export function createBriefRoutes(db: Database.Database): Router {
         throw err;
       }
 
-      const brief = briefService.updateBrief(req.params.id, ext, text);
+      const brief = briefService.updateBrief(req.params.id as string, ext, text);
       res.json(brief);
     } catch (err) {
       next(err);
@@ -112,7 +112,7 @@ export function createBriefRoutes(db: Database.Database): Router {
   // DELETE /:id — Delete a brief
   router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
     try {
-      briefService.deleteBrief(req.params.id);
+      briefService.deleteBrief(req.params.id as string);
       res.status(204).send();
     } catch (err) {
       next(err);
