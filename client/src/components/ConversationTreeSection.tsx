@@ -163,31 +163,7 @@ function PreviousTreeModal({ decisionTree, onClose }: { decisionTree: DecisionTr
   );
 }
 
-function _MultiProviderTreeTabs({ providerTrees, onNodeSelect }: { providerTrees: ProviderTreeMap; onNodeSelect: (n: ConversationNode) => void }) {
-  const providers = getProviderTreeKeys(providerTrees);
-  const [activeTab, setActiveTab] = useState<AIProvider>(providers[0]);
 
-  const activeTree = providerTrees[activeTab];
-
-  return (
-    <div className="space-y-3">
-      <div className="tabs tabs-boxed" role="tablist" aria-label="Provider tree comparison">
-        {providers.map((p) => (
-          <button
-            key={p}
-            role="tab"
-            aria-selected={p === activeTab}
-            className={`tab ${p === activeTab ? 'tab-active' : ''}`}
-            onClick={() => setActiveTab(p)}
-          >
-            {getProviderTreeTabLabel(p)}
-          </button>
-        ))}
-      </div>
-      {activeTree && <TreeDisplay decisionTree={activeTree} onNodeSelect={onNodeSelect} />}
-    </div>
-  );
-}
 
 export default function ConversationTreeSection({ treeId, tree, documents, research, decisionTrees, researchedProviders, onTreeChange, onProviderChange }: Props) {
   const { showToast, showProviderError } = useToast();
