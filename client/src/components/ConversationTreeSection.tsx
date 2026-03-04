@@ -163,7 +163,7 @@ function PreviousTreeModal({ decisionTree, onClose }: { decisionTree: DecisionTr
   );
 }
 
-function MultiProviderTreeTabs({ providerTrees, onNodeSelect }: { providerTrees: ProviderTreeMap; onNodeSelect: (n: ConversationNode) => void }) {
+function _MultiProviderTreeTabs({ providerTrees, onNodeSelect }: { providerTrees: ProviderTreeMap; onNodeSelect: (n: ConversationNode) => void }) {
   const providers = getProviderTreeKeys(providerTrees);
   const [activeTab, setActiveTab] = useState<AIProvider>(providers[0]);
 
